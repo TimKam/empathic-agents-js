@@ -14,34 +14,34 @@ function determineNash (utilityFunctions, actionSets) {
   const combinedActionSets = actionSets[0].concat(actionSets[1])
   const equilibria = []
   const actionPowerset = determinePowerSet(combinedActionSets)
-  console.log(`actionPowerset: ${JSON.stringify(actionPowerset)}`)
+  // console.log(`actionPowerset: ${JSON.stringify(actionPowerset)}`)
   actionPowerset.forEach(actionSet => {
     const actionsA = _.intersection(actionSets[0], actionSet)
     const actionsB = _.intersection(actionSets[1], actionSet)
     /* given actionsA, B's best options are actionsB
     given actionsB, A's best options are actionsA */
-    console.log(`actionsA: ${JSON.stringify(actionsA)}`)
-    console.log(`actionsB: ${JSON.stringify(actionsB)}`)
-    console.log(`argmaxB: ${JSON.stringify(argmax(utilityFunctions[1], actionSet, actionsA))}`)
-    console.log(`argmaxA: ${JSON.stringify(argmax(utilityFunctions[0], actionSet, actionsB))}`)
+    // console.log(`actionsA: ${JSON.stringify(actionsA)}`)
+    // console.log(`actionsB: ${JSON.stringify(actionsB)}`)
+    // console.log(`argmaxB: ${JSON.stringify(argmax(utilityFunctions[1], combinedActionSets, actionsA))}`)
+    // console.log(`argmaxA: ${JSON.stringify(argmax(utilityFunctions[0], combinedActionSets, actionsB))}`)
     const isEquilibrium =
-      argmax(utilityFunctions[1], actionSet, actionsA).some(
+      argmax(utilityFunctions[1], combinedActionSets, actionsA).some(
         acts => {
           const actsMaxB = _.intersection(acts, actionSets[1])
-          console.log(`actsMaxB: ${JSON.stringify(actsMaxB)}`)
-          console.log(_.intersection(actionsB, actsMaxB).length)
+          // console.log(`actsMaxB: ${JSON.stringify(actsMaxB)}`)
+          // console.log(_.intersection(actionsB, actsMaxB).length)
           return _.intersection(actionsB, actsMaxB).length === actsMaxB.length
         }
       ) &&
-      argmax(utilityFunctions[0], actionSet, actionsB).some(
+      argmax(utilityFunctions[0], combinedActionSets, actionsB).some(
         acts => {
           const actsMaxA = _.intersection(acts, actionSets[0])
-          console.log(`actsMaxA: ${JSON.stringify(actsMaxA)}`)
-          console.log(_.intersection(actionsA, actsMaxA).length)
+          // console.log(`actsMaxA: ${JSON.stringify(actsMaxA)}`)
+          // console.log(_.intersection(actionsA, actsMaxA).length)
           return _.intersection(actionsA, actsMaxA).length === actsMaxA.length
         }
       )
-    console.log(`isEquilibrium: ${isEquilibrium}`)
+    // console.log(`isEquilibrium: ${isEquilibrium}`)
     if (isEquilibrium) {
       equilibria.push(actionSet)
     }
