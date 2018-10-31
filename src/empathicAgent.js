@@ -1,14 +1,33 @@
 /*
 * Generic empathic agent module
 */
+const { determineNash, argmax, determinePowerSet, getKeysWithMaxValue } = require('./utils')
 
 /**
- * Determine actions
+ * Determine actions, naive empathic agent
+ *
+ * @returns {array} actions to execute
+ */
+const determineActionsNaive = () => {
+
+}
+
+/**
+ * Determine actions, lazy empathic agent
+ *
+ * @returns {array} actions to execute
+ */
+const determineActionsLazy = () => {
+
+}
+
+/**
+ * Determine actions, full empathic agent
  *
  * @returns {array} actions to execute
  */
 
-const determineAction = () => {
+const determineActionsFull = () => {
   // determine own maximal utility
   // determine other's maximal utility
   // check if conflict exists
@@ -31,6 +50,7 @@ const determineAction = () => {
   //    execute actions best for both parties
 
 }
+
 /**
  * Initiate agent with the following parameters:
  *

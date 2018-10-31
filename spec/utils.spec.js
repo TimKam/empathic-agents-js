@@ -38,9 +38,7 @@ const utilityFunctionsClassical = [
 describe('determineNash', () => {
   it('Should determine Nash equilibria correctly', () => {
     const actionSets = [['A_Bach', 'A_Stravinsky'], ['B_Bach', 'B_Stravinsky']]
-    const equilibria = determineNash(utilityFunctionsClassical, actionSets)
-    console.log(`equilibria: ${JSON.stringify(equilibria)}`);
-    console.log(`equilibria should: ${JSON.stringify([['A_Bach', 'B_Bach'], ['A_Stravinsky', 'B_Stravinsky']])}`);
+    const equilibria = determineNash(utilityFunctionsClassical, actionSets);
     [['A_Bach', 'B_Bach'], ['A_Stravinsky', 'B_Stravinsky']].forEach(toBeElement => {
       let isMatch = false
       equilibria.forEach(
