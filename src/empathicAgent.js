@@ -1,7 +1,28 @@
 /*
 * Generic empathic agent module
 */
+const _ = require('underscore')
+
 const { determineNash, argmax, determinePowerSet, getKeysWithMaxValue } = require('./utils')
+
+/**
+ * Construct and run full utility function
+ *
+ * @param  {function} utilityFunction
+ * @param  {array} acceptabilityRules
+ * @param  {array} actions
+ * @param  {number} agentIndex
+ *
+ * @returns {array} actions to execute
+ */
+const runFullUtilityFunction = (utilityFunction, acceptabilityRules, actions, agentIndex) => {
+  const isAcceptable = acceptabilityRules.every(acc => acc(actions[agentIndex]))
+  if (isAcceptable) {
+    return utilityFunction(actions)
+  } else {
+    return -Infinity
+  }
+}
 
 /**
  * Determine actions, naive empathic agent
@@ -24,48 +45,35 @@ const determineActionsLazy = () => {
 /**
  * Determine actions, full empathic agent
  *
+ * @param {array} utilityFunctions
+ * @param {array} acceptabilityRules
+ * @param {array} actions
+ * @param {array} agentIndex
+ *
  * @returns {array} actions to execute
  */
 
-const determineActionsFull = () => {
-  // determine own maximal utility
-  // determine other's maximal utility
-  // check if conflict exists
-  // if conflict: check if action acceptable
-  //    if acceptable:
-  //      if lazy:
-  //        execute actions
-  //      else:
-  //        check what other agent's actions are, given oneself executes current action set
-  //        if: resulting utility of both agents' action sets not optimal
-  //            discard current action set;
-  //            take potentially next best action set and go to "check if conflict exists"
-  //        else:
-  //          execute action set
-  //    else:
-  //      discard current action set;
-  //      take potentially next best action set and go to "check if conflict exists"
-  //      
-  // else:
-  //    execute actions best for both parties
-
+const determineActionsFull = (utilityFunctions, acceptabilityRules, actions, agentIndex) => {
+  const fullUtilityFunctions =
+    utilityFunctions.map(
+      (func, index) => actions => runFullUtilityFunction(
+        func, acceptabilityRules, actions, index)
+    )
+  const equilibria = determineNash(utilityFunctions, actions)
+  if (equilibria.length > 0) {
+    const sharedMaxEquilibria = equilibria.filter(equilibrium =>
+      equilibria.every(acts =>
+        fullUtilityFunctions[0](acts) * fullUtilityFunctions[1](acts) <=
+          fullUtilityFunctions[0](equilibrium) * fullUtilityFunctions[1](equilibrium)
+      )
+    )
+    return _.intersection(actions[agentIndex], sharedMaxEquilibria[0])
+  } else {
+    const sharedUtilityFunction = actions =>
+      utilityFunctions[0](actions) * utilityFunctions[1](actions)
+    const sharedArgmax = argmax(sharedUtilityFunction, actions)
+    return _.intersection(actions[agentIndex], sharedArgmax[0])
+  }
 }
 
-/**
- * Initiate agent with the following parameters:
- *
- * @param  {string} id
- * @param  {array} utilityMappings
- * @param  {array} acceptabilityRules
- * @param  {array} ownActions
- * @param  {string} type
- * @returns {object} Agent object
- */
-const empathicAgent = (id, utilityMappings, acceptabilityRules, ownActions, type) => ({
-  id,
-  utilityMappings,
-  acceptabilityRules,
-  determineAction
-})
-
-module.exports = empathicAgent
+module.exports = { runFullUtilityFunction, determineActionsFull }
