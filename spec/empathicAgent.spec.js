@@ -1,5 +1,10 @@
 const _ = require('underscore')
-const { runFullUtilityFunction, determineActionsFull } = require('../src/empathicAgent')
+const {
+  runFullUtilityFunction,
+  determineActionsNaive,
+  determineActionsLazy,
+  determineActionsFull
+} = require('../src/empathicAgent')
 
 describe('empathicAgent', () => {
   const utilityFunctions = [
@@ -56,12 +61,18 @@ describe('empathicAgent', () => {
     ).toEqual(1)
   })
 
-  xit('should correctly determine naively empathic actions', () => {
-    expect(true).toBe(false)
+  it('should correctly determine naively empathic actions', () => {
+    const naivelyEmpathicActions =
+      determineActionsNaive(utilityFunctions, acceptabilityRules, possibleActions, 0)
+    expect(_.intersection(naivelyEmpathicActions, ['A_Bach']).length)
+      .toEqual(naivelyEmpathicActions.length)
   })
 
-  xit('should correctly determine lazily empathic actions', () => {
-    expect(true).toBe(false)
+  it('should correctly determine lazily empathic actions', () => {
+    const lazilyEmpathicActions =
+      determineActionsLazy(utilityFunctions, acceptabilityRules, possibleActions, 0)
+    expect(_.intersection(lazilyEmpathicActions, ['A_Bach']).length)
+      .toEqual(lazilyEmpathicActions.length)
   })
 
   it('should correctly determine fully empathic actions', () => {
