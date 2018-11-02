@@ -121,13 +121,11 @@ describe('empathicAgent', () => {
     expect(_.intersection(naiveEmpathicActionsEx2, ['B_Mozart']).length)
       .toEqual(naiveEmpathicActionsEx2.length)
 
-    /*expect(_.intersection(lazyEmpathicActionsEx1, ['A_Mozart']).length)
-      .toEqual(lazyEmpathicActionsEx1.length)*/
+    expect(_.intersection(lazyEmpathicActionsEx1, ['A_Mozart']).length)
+      .toEqual(lazyEmpathicActionsEx1.length)
     expect(_.intersection(lazyEmpathicActionsEx2, ['B_Mozart']).length)
       .toEqual(lazyEmpathicActionsEx2.length)
-    console.log('#####')
-    console.log(lazyEmpathicActionsEx1)
-    console.log(lazyEmpathicActionsEx2)
+
     expect(_.intersection(fullEmpathicActionsEx1, ['A_Bach']).length)
       .toEqual(fullEmpathicActionsEx1.length)
     expect(_.intersection(fullEmpathicActionsEx2, ['B_Bach']).length)

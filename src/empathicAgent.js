@@ -90,26 +90,31 @@ const determineActionsLazy = (utilityFunctions, acceptabilityRules, actions, age
   const actsMax = argmax(utilityFunctions[agentIndex], combinedActionSets).filter(
     acts => acceptabilityRules.every(rule => rule(acts) === true)
   )
-  const goodActsMax = argmax(utilityFunctions[agentIndex], combinedActionSets).filter(acts => {
+  const goodActsMax = []
+  goodActsMax.push(argmax(utilityFunctions[agentIndex], combinedActionSets).filter(acts => {
     const isAcceptable = acceptabilityRules.every(rule => rule(acts) === true)
-    const isFeasible1 =
+    const isFeasible =
       utilityFunctions[0](
         [
           ...determineActionsNaive(utilityFunctions, acceptabilityRules, actions, 0),
           ...determineActionsNaive(utilityFunctions, acceptabilityRules, actions, 1)
         ]) >=
         utilityFunctions[0](actsMax)
-    const isFeasible2 =
+    return isAcceptable && isFeasible
+  }))
+  goodActsMax.push(argmax(utilityFunctions[agentIndex], combinedActionSets).filter(acts => {
+    const isAcceptable = acceptabilityRules.every(rule => rule(acts) === true)
+    const isFeasible =
       utilityFunctions[1](
         [
           ...determineActionsNaive(utilityFunctions, acceptabilityRules, actions, 0),
           ...determineActionsNaive(utilityFunctions, acceptabilityRules, actions, 1)
         ]) >=
         utilityFunctions[1](actsMax)
-    return isAcceptable && isFeasible1 && isFeasible2
-  })
-  if (goodActsMax.length > 0) {
-    return _.intersection(actions[agentIndex], goodActsMax[0])
+    return isAcceptable && isFeasible
+  }))
+  if (_.intersection(goodActsMax[0], goodActsMax[1]).length > 0) {
+    return _.intersection(actions[agentIndex], goodActsMax[agentIndex][0])
   } else {
     const sharedUtilityFunction = actions =>
       fullUtilityFunctions[0](actions) * fullUtilityFunctions[1](actions)
