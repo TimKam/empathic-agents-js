@@ -8,10 +8,16 @@ const {
 } = require('../src/empathicAgent')
 
 const {
-  utilityFunctionsEx,
-  acceptabilityRulesEx,
-  possibleActionsEx
-} = require('./example')
+  utilityFunctionsMusic,
+  acceptabilityRulesMusic,
+  possibleActionsMusic
+} = require('../src/examples/MusicExample')
+
+const {
+  utilityFunctionsVehicles,
+  acceptabilityRulesVehicles,
+  possibleActionsVehicles
+} = require('../src/examples/VehicleExample')
 
 describe('empathicAgent', () => {
   const utilityFunctions = [
@@ -102,33 +108,79 @@ describe('empathicAgent', () => {
     expect(_.intersection(fullEmpathicActions2, ['B_Bach']).length)
       .toEqual(fullEmpathicActions2.length)
   })
+})
 
-  it('should execute full example correctly ("integration" test)', () => {
-    const naiveEmpathicActionsEx1 =
-      determineActionsNaive(utilityFunctionsEx, acceptabilityRulesEx, possibleActionsEx, 0)
-    const lazyEmpathicActionsEx1 =
-      determineActionsLazy(utilityFunctionsEx, acceptabilityRulesEx, possibleActionsEx, 0)
-    const fullEmpathicActionsEx1 =
-      determineActionsFull(utilityFunctionsEx, acceptabilityRulesEx, possibleActionsEx, 0)
-    const naiveEmpathicActionsEx2 =
-      determineActionsNaive(utilityFunctionsEx, acceptabilityRulesEx, possibleActionsEx, 1)
-    const lazyEmpathicActionsEx2 =
-      determineActionsLazy(utilityFunctionsEx, acceptabilityRulesEx, possibleActionsEx, 1)
+describe('Vehicle example ("integration" test 1)', () => {
+  it('It should determine the naively empathic actions correctly', () => {
+    const naiveEmpathicActions1 =
+      determineActionsNaive(utilityFunctionsVehicles, acceptabilityRulesVehicles, possibleActionsVehicles, 0)
+    const naiveEmpathicActions2 =
+      determineActionsNaive(utilityFunctionsVehicles, acceptabilityRulesVehicles, possibleActionsVehicles, 1)
+    expect(_.intersection(naiveEmpathicActions1, ['A_Drive']).length)
+      .toEqual(naiveEmpathicActions1.length)
+    expect(_.intersection(naiveEmpathicActions2, ['B_Drive']).length)
+      .toEqual(naiveEmpathicActions2.length)
+  })
+
+  it('It should determine the lazily empathic actions correctly', () => {
+    const lazyEmpathicActions1 =
+      determineActionsLazy(utilityFunctionsVehicles, acceptabilityRulesVehicles, possibleActionsVehicles, 0)
+    const lazyEmpathicActions2 =
+      determineActionsLazy(utilityFunctionsVehicles, acceptabilityRulesVehicles, possibleActionsVehicles, 1)
+
+    expect(_.intersection(lazyEmpathicActions1, ['A_Wait']).length)
+      .toEqual(lazyEmpathicActions1.length)
+    expect(_.intersection(lazyEmpathicActions2, ['B_Drive']).length)
+      .toEqual(lazyEmpathicActions2.length)
+  })
+
+  it('It should determine the fully empathic actions correctly', () => {
+    const fullEmpathicActions1 =
+      determineActionsFull(utilityFunctionsVehicles, acceptabilityRulesVehicles, possibleActionsVehicles, 0)
     const fullEmpathicActionsEx2 =
-      determineActionsFull(utilityFunctionsEx, acceptabilityRulesEx, possibleActionsEx, 1)
-    expect(_.intersection(naiveEmpathicActionsEx1, ['A_Bach']).length)
-      .toEqual(naiveEmpathicActionsEx1.length)
-    expect(_.intersection(naiveEmpathicActionsEx2, ['B_Mozart']).length)
-      .toEqual(naiveEmpathicActionsEx2.length)
+      determineActionsFull(utilityFunctionsVehicles, acceptabilityRulesVehicles, possibleActionsVehicles, 1)
 
-    expect(_.intersection(lazyEmpathicActionsEx1, ['A_Mozart']).length)
-      .toEqual(lazyEmpathicActionsEx1.length)
-    expect(_.intersection(lazyEmpathicActionsEx2, ['B_Mozart']).length)
-      .toEqual(lazyEmpathicActionsEx2.length)
-
-    expect(_.intersection(fullEmpathicActionsEx1, ['A_Bach']).length)
-      .toEqual(fullEmpathicActionsEx1.length)
-    expect(_.intersection(fullEmpathicActionsEx2, ['B_Bach']).length)
+    expect(_.intersection(fullEmpathicActions1, ['A_Wait']).length)
+      .toEqual(fullEmpathicActions1.length)
+    expect(_.intersection(fullEmpathicActionsEx2, ['B_Drive']).length)
       .toEqual(fullEmpathicActionsEx2.length)
+  })
+})
+
+describe('Music example ("integration" test 2)', () => {
+  it('It should determine the naively empathic actions correctly', () => {
+    const naiveEmpathicActions1 =
+      determineActionsNaive(utilityFunctionsMusic, acceptabilityRulesMusic, possibleActionsMusic, 0)
+    const naiveEmpathicActions2 =
+      determineActionsNaive(utilityFunctionsMusic, acceptabilityRulesMusic, possibleActionsMusic, 1)
+
+    expect(_.intersection(naiveEmpathicActions1, ['A_Bach']).length)
+      .toEqual(naiveEmpathicActions1.length)
+    expect(_.intersection(naiveEmpathicActions2, ['B_Mozart']).length)
+      .toEqual(naiveEmpathicActions2.length)
+  })
+
+  it('It should determine the lazily empathic actions correctly', () => {
+    const lazyEmpathicActions1 =
+      determineActionsLazy(utilityFunctionsMusic, acceptabilityRulesMusic, possibleActionsMusic, 0)
+    const lazyEmpathicActions2 =
+      determineActionsLazy(utilityFunctionsMusic, acceptabilityRulesMusic, possibleActionsMusic, 1)
+
+    expect(_.intersection(lazyEmpathicActions1, ['A_Mozart']).length)
+      .toEqual(lazyEmpathicActions1.length)
+    expect(_.intersection(lazyEmpathicActions2, ['B_Mozart']).length)
+      .toEqual(lazyEmpathicActions2.length)
+  })
+
+  it('It should determine the fully empathic actions correctly', () => {
+    const fullEmpathicActions1 =
+      determineActionsFull(utilityFunctionsMusic, acceptabilityRulesMusic, possibleActionsMusic, 0)
+    const fullEmpathicActions2 =
+      determineActionsFull(utilityFunctionsMusic, acceptabilityRulesMusic, possibleActionsMusic, 1)
+
+    expect(_.intersection(fullEmpathicActions1, ['A_Bach']).length)
+      .toEqual(fullEmpathicActions1.length)
+    expect(_.intersection(fullEmpathicActions2, ['B_Bach']).length)
+      .toEqual(fullEmpathicActions2.length)
   })
 })

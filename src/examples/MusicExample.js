@@ -1,4 +1,4 @@
-const utilityFunctionsEx = [
+const utilityFunctionsMusic = [
   actions => {
     const isImpossible =
       actions.length !== 2 ||
@@ -45,15 +45,15 @@ const rule = actions => {
   }
 }
 
-const acceptabilityRulesEx = [rule, rule]
+const acceptabilityRulesMusic = [rule, rule]
 
-const possibleActionsEx = [
+const possibleActionsMusic = [
   ['A_Bach', 'A_Stravinsky', 'A_Mozart'],
   ['B_Bach', 'B_Stravinsky', 'B_Mozart']
 ]
 
 module.exports = {
-  utilityFunctionsEx,
-  acceptabilityRulesEx,
-  possibleActionsEx
+  utilityFunctionsMusic,
+  acceptabilityRulesMusic,
+  possibleActionsMusic
 }
