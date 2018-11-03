@@ -39,7 +39,9 @@ wss.on('connection', ws => {
         }))
       } else {
         ws.send(JSON.stringify({
-          possibleActions: possibleActionsMusic
+          init: {
+            possibleActions: possibleActionsMusic
+          }
         }))
       }
       if (clientsConnected.length === 2) {
