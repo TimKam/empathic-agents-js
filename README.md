@@ -78,7 +78,7 @@ To execute the tests, run ``npm test``.
 
 ## Generating JSDoc
 The code of this project is documented with [JSDoc](http://usejsdoc.org/).
-To generate the documentation, run ``npm doc``.
+To generate the documentation, run ``npm run doc``.
 You will find the generated documentation in the ``out`` directory.
 
 ## Acknowledgements
