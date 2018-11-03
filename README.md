@@ -1,4 +1,6 @@
 # Empathic agents: running example in JavaScript (Node.js)
+[![Build Status](https://travis-ci.org/TimKam/empathic-agents-js.svg?branch=master)](https://travis-ci.org/TimKam/empathic-agents-js)
+
 **Author**: [Timotheus Kampik](https://github.com/TimKam)
 
 This repository contains an example implementation of *empathic agents*--agents that use to make trade-offs between their own utility and the utility of other agents in their environment when deciding which actions they should execute--implemented in JavaScript (for Node.js).
