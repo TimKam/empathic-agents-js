@@ -38,8 +38,10 @@ The agents are clients, while the server models the environment and manages agen
 
 
 Currently, the application is limited to two agents.
+For this basic demonstrations, both socket server and clients run on the same machine.
 The default scenario this project implements is a one-off vehicle coordination scenario (see below).
-However, it is possible to adjust the agent and environment specification to run custom scenarios.
+It is possible to adjust the agent and environment specification to run more advanced custom scenarios;
+however, this scientific prototype takes some short cuts that make it infeasible for production use.
 
 ## Requirements
 The examples are implemented in JavaScript and require [Node.js](https://nodejs.org/), version 10.11.0 or later, as well as [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com).

@@ -47,10 +47,12 @@ const runFullUtilityFunction = (utilityFunction, acceptabilityRules, actions) =>
  * @param  {array} acceptabilityRules
  * @param  {array} actions
  * @param  {number} agentIndex
+ * @param  {boolean} log
  * @returns {array} actions to execute
  */
-const determineActionsNaive = (utilityFunctions, acceptabilityRules, actions, agentIndex) => {
+const determineActionsNaive = (utilityFunctions, acceptabilityRules, actions, agentIndex, log = true) => {
   setColorTheme(agentIndex)
+  if (log) console.log(`Agent ${agentIndex}, running naive empathic agent algorithm.`.agent)
   const fullUtilityFunctions =
     utilityFunctions.map(func => actions => runFullUtilityFunction(
       func, acceptabilityRules, actions)
@@ -61,13 +63,24 @@ const determineActionsNaive = (utilityFunctions, acceptabilityRules, actions, ag
       rule(acts) === true
     )
   )
+  if (log) console.log(`acceptableArgmax, as determined by agent ${agentIndex}: ${JSON.stringify(acceptableArgmax)}`.agent)
   if (acceptableArgmax.length > 0) {
-    return _.intersection(acceptableArgmax[0], actions[agentIndex])
+    const determinedActions = _.intersection(acceptableArgmax[0], actions[agentIndex])
+    if (log) {
+      console.log(`Agent ${agentIndex} found acceptableArgmax.
+      Determined action(s): ${JSON.stringify(determinedActions)}`.agent)
+    }
+    return determinedActions
   } else {
     const sharedUtilityFunction = actions =>
       fullUtilityFunctions[0](actions) * fullUtilityFunctions[1](actions)
     const sharedArgmax = argmax(sharedUtilityFunction, combinedActionSets)
-    return _.intersection(actions[agentIndex], sharedArgmax[0])
+    const determinedActions = _.intersection(actions[agentIndex], sharedArgmax[0])
+    if (log) {
+      console.log(`Agent ${agentIndex} did not find acceptableArgmax and falls back to maximize shared utility.
+      Determined action(s): ${JSON.stringify(determinedActions)}`.agent)
+    }
+    return determinedActions
   }
 }
 
@@ -82,6 +95,7 @@ const determineActionsNaive = (utilityFunctions, acceptabilityRules, actions, ag
  */
 const determineActionsLazy = (utilityFunctions, acceptabilityRules, actions, agentIndex) => {
   setColorTheme(agentIndex)
+  console.log(`Agent ${agentIndex}, running lazy empathic agent algorithm.`.agent)
   const fullUtilityFunctions =
     utilityFunctions.map(func => actions => runFullUtilityFunction(
       func, acceptabilityRules, actions)
@@ -96,8 +110,8 @@ const determineActionsLazy = (utilityFunctions, acceptabilityRules, actions, age
     const isFeasible =
       utilityFunctions[0](
         [
-          ...determineActionsNaive(utilityFunctions, acceptabilityRules, actions, 0),
-          ...determineActionsNaive(utilityFunctions, acceptabilityRules, actions, 1)
+          ...determineActionsNaive(utilityFunctions, acceptabilityRules, actions, 0, false),
+          ...determineActionsNaive(utilityFunctions, acceptabilityRules, actions, 1, false)
         ]) >=
         utilityFunctions[0](actsMax)
     return isAcceptable && isFeasible
@@ -107,19 +121,26 @@ const determineActionsLazy = (utilityFunctions, acceptabilityRules, actions, age
     const isFeasible =
       utilityFunctions[1](
         [
-          ...determineActionsNaive(utilityFunctions, acceptabilityRules, actions, 0),
-          ...determineActionsNaive(utilityFunctions, acceptabilityRules, actions, 1)
+          ...determineActionsNaive(utilityFunctions, acceptabilityRules, actions, 0, false),
+          ...determineActionsNaive(utilityFunctions, acceptabilityRules, actions, 1, false)
         ]) >=
         utilityFunctions[1](actsMax)
     return isAcceptable && isFeasible
   }))
+  console.log(`goodActsMax, as determined by agent ${agentIndex}: ${JSON.stringify(goodActsMax)}`.agent)
   if (_.intersection(goodActsMax[0], goodActsMax[1]).length > 0) {
-    return _.intersection(actions[agentIndex], goodActsMax[agentIndex][0])
+    const determinedActions = _.intersection(actions[agentIndex], goodActsMax[agentIndex][0])
+    console.log(`Agent ${agentIndex} found goodActsMax.
+      Determined action(s): ${JSON.stringify(determinedActions)}`.agent)
+    return determinedActions
   } else {
     const sharedUtilityFunction = actions =>
       fullUtilityFunctions[0](actions) * fullUtilityFunctions[1](actions)
     const sharedArgmax = argmax(sharedUtilityFunction, combinedActionSets)
-    return _.intersection(actions[agentIndex], sharedArgmax[0])
+    const determinedActions = _.intersection(actions[agentIndex], sharedArgmax[0])
+    console.log(`Agent ${agentIndex} did not find goodActsMax and falls back to maximize shared utility.
+    Determined action(s): ${JSON.stringify(determinedActions)}`.agent)
+    return determinedActions
   }
 }
 
@@ -151,15 +172,22 @@ const determineActionsFull = (utilityFunctions, acceptabilityRules, actions, age
           fullUtilityFunctions[0](equilibrium) * fullUtilityFunctions[1](equilibrium)
       )
     )
-    return _.intersection(actions[agentIndex], sharedMaxEquilibria[0])
+    const determinedActions = _.intersection(actions[agentIndex], sharedMaxEquilibria[0])
+    console.log(
+      `Shared max equilibria, as determined by agent ${agentIndex}: ${JSON.stringify(sharedMaxEquilibria)}
+       Determined action(s): ${JSON.stringify(determinedActions)}`.agent
+    )
+    return determinedActions
   } else {
     const sharedUtilityFunction = actions =>
       fullUtilityFunctions[0](actions) * fullUtilityFunctions[1](actions)
     const sharedArgmax = argmax(sharedUtilityFunction, combinedActionSets)
+    const determinedActions = _.intersection(actions[agentIndex], sharedArgmax[0])
     console.log(
-      `Shared argmax, as determined by agent ${agentIndex}: ${JSON.stringify(sharedArgmax)}`.agent
+      `Shared argmax, as determined by agent ${agentIndex}: ${JSON.stringify(sharedArgmax)}
+       Determined action(s): ${JSON.stringify(determinedActions)}`.agent
     )
-    return _.intersection(actions[agentIndex], sharedArgmax[0])
+    return determinedActions
   }
 }
 

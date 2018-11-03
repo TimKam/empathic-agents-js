@@ -137,13 +137,12 @@ describe('Vehicle example ("integration" test 1)', () => {
   it('It should determine the fully empathic actions correctly', () => {
     const fullEmpathicActions1 =
       determineActionsFull(utilityFunctionsVehicles, acceptabilityRulesVehicles, possibleActionsVehicles, 0)
-    const fullEmpathicActionsEx2 =
+    const fullEmpathicActions2 =
       determineActionsFull(utilityFunctionsVehicles, acceptabilityRulesVehicles, possibleActionsVehicles, 1)
-
     expect(_.intersection(fullEmpathicActions1, ['A_Wait']).length)
       .toEqual(fullEmpathicActions1.length)
-    expect(_.intersection(fullEmpathicActionsEx2, ['B_Drive']).length)
-      .toEqual(fullEmpathicActionsEx2.length)
+    expect(_.intersection(fullEmpathicActions2, ['B_Drive']).length)
+      .toEqual(fullEmpathicActions2.length)
   })
 })
 
