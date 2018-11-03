@@ -54,7 +54,22 @@ You find an overview of the required npm packages that will be automatically ins
 
 ## Running the example
 In this project, we provide the *vehicle* scenario of the corresponding research paper as a running example.
-To run the example execute the ``index.js`` file in the project's root directory with ``node index.js``, ``npm run``, or ``yarn run``.
+To run the example proceed as follows:
+
+*   Navigate to the project's root directory and open three terminal windows.
+
+*   In your first window, start the environment server by executing ``node ./src/server.js``.
+
+*   In your second and and third window, start two agent by running ``node src/agent.js <scenarioType> <agentId> <agentType>``, with:
+
+    *   ``<scenarioType>``: the scenario to be executed (either ``vehicles``, or ``music``);
+
+    *   ``<agentId>``: the ID of the agent (either ``0`` or ``1``);
+
+    *   ``<agentType>``: the type of the agent (either ``naive``, ``lazy``, or ``full``).
+
+    For example, you could run ``node src/agent.js music 1 full`` in one window and ``node src/agent.js music 0 full`` in the other.
+
 Note that you can adjust the example specification to run other 2-agent scenarios.
 
 ## Testing
